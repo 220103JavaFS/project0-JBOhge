@@ -12,6 +12,12 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+    compile 'io.javalin:javalin:4.2.0'
+    implementation 'com.oracle.database.jdbc:ojdbc8:19.6.0.0'
+    implementation 'com.oracle.database.jdbc:ucp:19.6.0.0'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.31'
+
 }
 
 test {
