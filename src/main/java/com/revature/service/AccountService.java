@@ -11,4 +11,12 @@ public class AccountService {
     public ArrayList<Account> getAccounts()  {
         return accountDAO.getAccounts();
     }
+
+    public Account getAccountById(int id){
+        return accountDAO.getAccountById(id);
+    }
+
+    public boolean addAccount(Account a) {
+        return accountDAO.addAccount(a);
+    }
 }

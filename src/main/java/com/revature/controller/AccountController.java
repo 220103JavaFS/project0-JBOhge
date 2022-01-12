@@ -19,6 +19,26 @@ public class AccountController extends Controller{
             ctx.json(accounts);
             ctx.status(200);
         });
+        app.get("/accounts/{id}", ctx -> {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            Account a = accountService.getAccountById(id);
+            if(a != null){
+                ctx.json(a);
+                ctx.status(200);
+            }
+            else {
+                ctx.status(404);
+            }
+
+        });
+        app.post("/accounts/new", ctx -> {
+           Account a = ctx.bodyAsClass(Account.class);
+            if (accountService.addAccount(a)) {
+                ctx.status(201);
+            } else {
+                ctx.status(400);
+            }
+        });
 
 
     }
