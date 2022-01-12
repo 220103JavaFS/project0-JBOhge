@@ -26,12 +26,6 @@ public class JDBCPostgreSQLConnection {
             }
             return connection;
 
-//            connection.createStatement().executeUpdate("INSERT INTO ACCOUNT (accountId, name, balance) VALUES (3, 'Jon', 300);");
-//            PgResultSet resultSet = (PgResultSet) connection.createStatement().executeQuery("SELECT * FROM ACCOUNT");
-//            resultSet.next();
-//            System.out.println(resultSet.getArray("first_name"));
-
-
     }
 
 }

@@ -21,7 +21,7 @@ public class AccountDAO {
                 ArrayList<Account> accounts = new ArrayList<>();
 
                 try{
-                        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM ACCOUNT");
+                        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM account");
                         while(resultSet.next()){
                                 accounts.add(createAccount(resultSet));
                         }
@@ -34,7 +34,7 @@ public class AccountDAO {
 
         public Account getAccountById(int id) {
                 try {
-                        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM ACCOUNT WHERE ACCOUNT_ID =" + id);
+                        ResultSet resultSet = connection.createStatement().executeQuery("SELECT * FROM account WHERE account_id =" + id);
                         if(resultSet.next()){
                                 return createAccount(resultSet);
                         }
@@ -56,7 +56,7 @@ public class AccountDAO {
         }
 
         public boolean addAccount(Account a) {
-                StringBuilder sb = new StringBuilder("INSERT INTO ACCOUNT VALUES ");
+                StringBuilder sb = new StringBuilder("INSERT INTO account VALUES ");
                 sb.append("('" + a.getAccountId() + "',");
                 sb.append("'" + a.getFirstName() + "',");
                 sb.append("'" + a.getLastName() + "',");
