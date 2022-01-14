@@ -6,9 +6,8 @@ import com.revature.service.AccountService;
 import io.javalin.Javalin;
 import io.javalin.core.security.RouteRole;
 
-import java.sql.Array;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class AccountController extends Controller{
@@ -23,14 +22,22 @@ public class AccountController extends Controller{
 
         //Get All accounts
         app.get("/accounts", ctx -> {
-            ArrayList<Account> accounts = accountService.getAccounts();
-            ctx.json(accounts);
-            ctx.status(200);
+
+            if(ctx.req.getSession(false)!=null){
+                ArrayList<Account> accounts = accountService.getAccounts();
+                ctx.json(accounts);
+                ctx.status(200);
+            }
+            else {
+                ctx.status(401);
+            }
+
 
         }, Role.EMPLOYEE);
 
 
         app.get("/accounts/{id}", ctx -> {
+            //TODO: Check that user should have access to this page
             int id = Integer.parseInt(ctx.pathParam("id"));
             Account a = accountService.getAccountById(id);
             if(a != null){
@@ -41,7 +48,7 @@ public class AccountController extends Controller{
                 ctx.status(404);
             }
 
-        }, Role.ADMIN);
+        }, Role.EMPLOYEE);
 
         app.post("/accounts/new", ctx -> {
            Account a = ctx.bodyAsClass(Account.class);
