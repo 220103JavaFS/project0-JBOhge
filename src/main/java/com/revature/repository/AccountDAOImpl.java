@@ -19,7 +19,7 @@ public class AccountDAOImpl implements AccountDAO{
         @Override
         public boolean addAccount(Account a) {
                 try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
-                        String sql = "INSERT INTO account (first_name, last_name, username, password, access_level) VALUES ('?','?','?','?','?');";
+                        String sql = "INSERT INTO account (first_name, last_name, username, password, access_level) VALUES (?,?,?,?,?);";
                         PreparedStatement statement = connection.prepareStatement(sql);
 
                         int count = 1;
@@ -27,7 +27,7 @@ public class AccountDAOImpl implements AccountDAO{
                         statement.setString(count++, a.getLastName());
                         statement.setString(count++, a.getUsername());
                         statement.setString(count++, a.getPassword());
-                        statement.setString(count++, a.getAccessLevel()+"");
+                        statement.setInt(count++, a.getAccessLevel());
 
                         statement.execute();
 
@@ -62,7 +62,7 @@ public class AccountDAOImpl implements AccountDAO{
                 try(Connection connection = JDBCPostgreSQLConnection.getConnection()) {
                         String sql = "SELECT * FROM account WHERE account_id = ?;";
                         PreparedStatement statement = connection.prepareStatement(sql);
-                        statement.setString(1, id+"");
+                        statement.setInt(1, id);
 
                         ResultSet resultSet = statement.executeQuery();
                         if(resultSet.next()){
@@ -77,7 +77,19 @@ public class AccountDAOImpl implements AccountDAO{
 
         @Override
         public Account getAccountByUsername(String username){
-                //TODO:
+                try(Connection connection = JDBCPostgreSQLConnection.getConnection()) {
+                        String sql = "SELECT * FROM account WHERE username = ?;";
+                        PreparedStatement statement = connection.prepareStatement(sql);
+                        statement.setString(1, username);
+
+                        ResultSet resultSet = statement.executeQuery();
+                        if(resultSet.next()){
+                                return createAccountObj(resultSet);
+                        }
+                }
+                catch (SQLException e){
+                        e.printStackTrace();
+                }
                 return null;
         }
 

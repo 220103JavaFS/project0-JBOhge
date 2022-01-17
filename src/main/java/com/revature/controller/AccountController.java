@@ -50,6 +50,19 @@ public class AccountController extends Controller{
 
         }, Role.EMPLOYEE);
 
+        app.get("/accounts/username/{username}", ctx -> {
+           String username = ctx.pathParam("username");
+           Account a = accountService.getAccountByUsername(username);
+            if(a != null){
+                ctx.json(a);
+                ctx.status(200);
+            }
+            else {
+                ctx.status(404);
+            }
+
+        }, Role.EMPLOYEE);
+
         app.post("/accounts/new", ctx -> {
            Account a = ctx.bodyAsClass(Account.class);
             if (accountService.addAccount(a)) {

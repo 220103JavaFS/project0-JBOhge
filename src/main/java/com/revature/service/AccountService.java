@@ -16,6 +16,10 @@ public class AccountService {
         return accountDAO.getAccountById(id);
     }
 
+    public Account getAccountByUsername(String username){
+        return accountDAO.getAccountByUsername(username);
+    }
+
     public boolean addAccount(Account a) {
         return accountDAO.addAccount(a);
     }

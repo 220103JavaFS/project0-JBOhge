@@ -7,23 +7,21 @@ import java.sql.SQLException;
 
 public class JDBCPostgreSQLConnection {
 
-    private static Connection connection;
     private static String url = "jdbc:postgresql://localhost:5432/proj0";
-    private static String userName = "postgres";
-    private static String password = "password1";
+    private static String userName = System.getenv("SQLUsername");
+    private static String password = System.getenv("SQLPassword");
 
-    public static Connection getConnection(){
+    public static Connection getConnection() throws SQLException{
 
-            if(connection == null){
-                try {
-                    connection = DriverManager.getConnection(url, userName, password);
-                }
-                catch (SQLException e){
-                    e.printStackTrace();
-                }
+            try {
+                Class.forName(("org.postgresql.Driver"));
+
+            }catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            return connection;
 
+
+           return DriverManager.getConnection(url, userName, password);
     }
 
 }
