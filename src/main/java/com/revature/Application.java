@@ -4,16 +4,10 @@ import com.revature.controller.AccountController;
 import com.revature.controller.Controller;
 import com.revature.controller.LoginController;
 import com.revature.model.Account;
-import com.revature.repository.AccountDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Iterator;
 
 public class Application {
 
@@ -57,36 +51,17 @@ public class Application {
     }
 
 
-    //static helper method to get the user's role using username and password passed
-    //in the Authentication header
+    //static helper method to get the user's role by looking at the
     private static Role getUserRole(Context ctx) {
         Account account = null;
         try{
             account = (Account) ctx.req.getSession(false).getAttribute("account");
         }
         catch (Exception e){
-            //do nothing xD
+            //attribute "account" didn't exist or is not an Account object
         }
 
-
-
-        //Auth header has format "Basic {(Base64)username:password}"
-//        String auth = ctx.header("Authorization").split(" ")[1];
-//        byte[] decodedBytes = Base64.getDecoder().decode(auth);
-//        String decodedString = new String(decodedBytes);
-//        ArrayList<String> userInfo = new ArrayList<String>(Arrays.asList(decodedString.split(":")));
-//        Iterator<String> i = userInfo.iterator();
-//        String username = "";
-//        String password = "";
-//        if(i.hasNext()){
-//            username = i.next();
-//        }
-//        if(i.hasNext()){
-//            password = i.next();
-//        }
-//
-//        Account account = AccountDAO.getAccountByUsernamePassword(username, password);
-
+        //Default Access level ANYONE = 1
         int accessLevel = 1;
         if(account != null){
             accessLevel = account.getAccessLevel();

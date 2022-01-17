@@ -28,6 +28,11 @@ public class LoginController extends Controller {
             }
         }, Role.ANYONE);
 
+        app.get("/logout", ctx -> {
+           ctx.req.getSession().invalidate();
+           ctx.status(200);
+        }, Role.ANYONE);
+
     }
 
 

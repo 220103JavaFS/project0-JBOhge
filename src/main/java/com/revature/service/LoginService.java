@@ -1,13 +1,13 @@
 package com.revature.service;
 
 import com.revature.model.Account;
-import com.revature.repository.AccountDAO;
+import com.revature.repository.AccountDAOImpl;
 
 public class LoginService {
 
-    private AccountDAO accountDAO = new AccountDAO();
+    private AccountDAOImpl accountDAO = new AccountDAOImpl();
 
     public Account login(String username, String password){
-        return AccountDAO.getAccountByUsernamePassword(username, password);
+        return accountDAO.getAccountByUsernamePassword(username, password);
     }
 }
