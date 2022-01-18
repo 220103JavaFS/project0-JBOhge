@@ -5,11 +5,10 @@ import com.revature.model.Account;
 import com.revature.model.AccountDTO;
 import com.revature.service.AccountService;
 import io.javalin.Javalin;
-import io.javalin.core.security.RouteRole;
 
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class AccountController extends Controller{
 
@@ -17,9 +16,6 @@ public class AccountController extends Controller{
 
     @Override
     public void addRoutes(Javalin app) {
-
-        List<RouteRole> roles = new ArrayList<>();
-        roles.add(Role.EMPLOYEE);
 
         //Get All accounts
         app.get("/accounts", ctx -> {
@@ -35,7 +31,6 @@ public class AccountController extends Controller{
 
 
         }, Role.EMPLOYEE);
-
 
         app.get("/accounts/{id}", ctx -> {
             //TODO: Check that user should have access to this page
@@ -72,6 +67,26 @@ public class AccountController extends Controller{
                 ctx.status(400);
             }
         }, Role.ANYONE);
+
+        app.put("/accounts/update", ctx -> {
+            AccountDTO accountDTO = ctx.bodyAsClass(AccountDTO.class);
+            if(accountService.updateAccount(accountDTO)){
+                ctx.status(202);
+            }
+            else {
+                ctx.status(400);
+            }
+        }, Role.EMPLOYEE);
+
+        app.delete("accounts/delete/{id}", ctx -> {
+           int accountId = Integer.parseInt(ctx.pathParam("id"));
+           if(accountService.deleteAccount(accountId)){
+               ctx.status(200);
+           }
+           else {
+               ctx.status(400);
+           }
+        }, Role.EMPLOYEE);
 
 
 

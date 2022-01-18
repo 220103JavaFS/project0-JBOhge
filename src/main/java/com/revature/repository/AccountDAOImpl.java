@@ -95,21 +95,48 @@ public class AccountDAOImpl implements AccountDAO{
 
         @Override
         public boolean updateAccount(Account a) {
-                //TODO:
+                try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
+                        String sql = "UPDATE account SET first_name = ? , last_name = ? , username = ? , password = ? WHERE username = ?;";
+                        PreparedStatement statement = connection.prepareStatement(sql);
+
+                        int count = 1;
+                        statement.setString(count++, a.getFirstName());
+                        statement.setString(count++, a.getLastName());
+                        statement.setString(count++, a.getUsername());
+                        statement.setBytes(count++, a.getHash());
+                        statement.setString(count++, a.getUsername());
+
+                        statement.execute();
+
+                        return true;
+
+                }
+                catch (SQLException e){
+                        e.printStackTrace();
+                }
+
                 return false;
         }
 
         @Override
         public boolean deleteAccount(int id) {
-                //TODO:
+                try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
+                        //NOTE: Where you try to delete on row with an account_id that doesn't exist still don't throw SQL error
+                        String sql = "DELETE FROM account WHERE account_id = ? ;";
+                        PreparedStatement statement = connection.prepareStatement(sql);
+                        statement.setInt(1, id);
+                        statement.execute();
+
+                        return true;
+
+                }
+                catch (SQLException e){
+                        e.printStackTrace();
+                }
+
                 return false;
         }
 
-        @Override
-        public boolean deleteAccount(String username) {
-                //TODO:
-                return false;
-        }
 
         //helper method to create an account object from the ResultSet object representing the SQL query
         private static Account createAccountObj(ResultSet resultSet) throws SQLException {

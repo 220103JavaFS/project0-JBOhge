@@ -26,17 +26,18 @@ public class AccountService {
     }
 
     public boolean addAccount(AccountDTO accountDTO) {
-        //generate account password hash and create new account object to insert into DB
-        String password = accountDTO.getPassword();
-        MessageDigest messageDigest = null;
-        try {
-            messageDigest = MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException e){
-            e.printStackTrace();
-        }
-        byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
-        Account account = new Account(1, accountDTO.getFirstName(),accountDTO.getLastName(), accountDTO.getUsername(), hash, 1);
+        Account account = Account.getAccountObject(accountDTO);
 
         return accountDAO.addAccount(account);
+    }
+
+    public boolean updateAccount(AccountDTO accountDTO){
+        Account account = Account.getAccountObject(accountDTO);
+
+        return accountDAO.updateAccount(account);
+    }
+
+    public boolean deleteAccount(int id){
+        return accountDAO.deleteAccount(id);
     }
 }

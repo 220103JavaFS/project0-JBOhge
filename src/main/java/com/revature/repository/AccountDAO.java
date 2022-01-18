@@ -18,7 +18,4 @@ public interface AccountDAO {
 
     boolean deleteAccount(int id);
 
-    boolean deleteAccount(String username);
-
-
 }

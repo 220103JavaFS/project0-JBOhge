@@ -1,5 +1,8 @@
 package com.revature.model;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 public class Account {
@@ -82,5 +85,18 @@ public class Account {
                 ", accessLevel=" + accessLevel +
                 ", hash=" + Arrays.toString(hash) +
                 '}';
+    }
+
+
+    public static Account getAccountObject(AccountDTO accountDTO){
+        String password = accountDTO.getPassword();
+        MessageDigest messageDigest = null;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        byte[] hash = messageDigest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return new Account(1, accountDTO.getFirstName(),accountDTO.getLastName(), accountDTO.getUsername(), hash, 1);
     }
 }
