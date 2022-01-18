@@ -2,6 +2,7 @@ package com.revature.controller;
 
 import com.revature.Role;
 import com.revature.model.Account;
+import com.revature.model.AccountDTO;
 import com.revature.service.AccountService;
 import io.javalin.Javalin;
 import io.javalin.core.security.RouteRole;
@@ -48,7 +49,7 @@ public class AccountController extends Controller{
                 ctx.status(404);
             }
 
-        }, Role.EMPLOYEE);
+        }, Role.ANYONE);
 
         app.get("/accounts/username/{username}", ctx -> {
            String username = ctx.pathParam("username");
@@ -64,8 +65,8 @@ public class AccountController extends Controller{
         }, Role.EMPLOYEE);
 
         app.post("/accounts/new", ctx -> {
-           Account a = ctx.bodyAsClass(Account.class);
-            if (accountService.addAccount(a)) {
+           AccountDTO accountDTO = ctx.bodyAsClass(AccountDTO.class);
+            if (accountService.addAccount(accountDTO)) {
                 ctx.status(201);
             } else {
                 ctx.status(400);

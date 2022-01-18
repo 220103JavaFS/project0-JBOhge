@@ -26,7 +26,7 @@ public class AccountDAOImpl implements AccountDAO{
                         statement.setString(count++, a.getFirstName());
                         statement.setString(count++, a.getLastName());
                         statement.setString(count++, a.getUsername());
-                        statement.setString(count++, a.getPassword());
+                        statement.setBytes(count++, a.getHash());
                         statement.setInt(count++, a.getAccessLevel());
 
                         statement.execute();
@@ -94,25 +94,6 @@ public class AccountDAOImpl implements AccountDAO{
         }
 
         @Override
-        public Account getAccountByUsernamePassword(String username, String password) {
-                try(Connection connection = JDBCPostgreSQLConnection.getConnection()) {
-                        String sql = "SELECT * FROM account WHERE username = ? AND password = ?;";
-                        PreparedStatement statement = connection.prepareStatement(sql);
-                        statement.setString(1, username);
-                        statement.setString(2, password);
-
-                        ResultSet resultSet = statement.executeQuery();
-                        if(resultSet.next()){
-                                return createAccountObj(resultSet);
-                        }
-                }
-                catch (SQLException e){
-                        e.printStackTrace();
-                }
-                return null;
-        }
-
-        @Override
         public boolean updateAccount(Account a) {
                 //TODO:
                 return false;
@@ -136,8 +117,9 @@ public class AccountDAOImpl implements AccountDAO{
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 String username = resultSet.getString("username");
-                String password = resultSet.getString("password");
+                byte[] hash = resultSet.getBytes("password");
                 int accessLevel = resultSet.getInt("access_level");
-                return new Account(accountId, firstName, lastName, username, password, accessLevel);
+
+                return new Account(accountId, firstName, lastName, username, hash, accessLevel);
         }
 }

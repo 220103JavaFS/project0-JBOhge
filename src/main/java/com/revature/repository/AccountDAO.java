@@ -14,8 +14,6 @@ public interface AccountDAO {
 
     Account getAccountByUsername(String username);
 
-    Account getAccountByUsernamePassword(String username, String password);
-
     boolean updateAccount(Account a);
 
     boolean deleteAccount(int id);

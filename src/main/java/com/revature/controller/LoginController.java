@@ -16,10 +16,11 @@ public class LoginController extends Controller {
 
         app.post("/login", ctx -> {
             AccountDTO account = ctx.bodyAsClass(AccountDTO.class);
-            Account a  = loginService.login(account.username, account.password);
+            Account a  = loginService.login(account.getUsername(), account.getPassword());
             if(a != null){
                 ctx.req.getSession();
                 ctx.req.getSession(false).setAttribute("account", a);
+                ctx.req.getSession(false).setAttribute("accessLevel", a.getAccessLevel());
                 ctx.status(200);
             }
             else {

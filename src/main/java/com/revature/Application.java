@@ -53,18 +53,12 @@ public class Application {
 
     //static helper method to get the user's role by looking at the
     private static Role getUserRole(Context ctx) {
-        Account account = null;
+        int accessLevel = 1;
         try{
-            account = (Account) ctx.req.getSession(false).getAttribute("account");
+            accessLevel = (Integer) ctx.req.getSession(false).getAttribute("accessLevel");
         }
         catch (Exception e){
-            //attribute "account" didn't exist or is not an Account object
-        }
-
-        //Default Access level ANYONE = 1
-        int accessLevel = 1;
-        if(account != null){
-            accessLevel = account.getAccessLevel();
+            //attribute "accessLevel" didn't exist or is not an Account object
         }
 
         switch (accessLevel){

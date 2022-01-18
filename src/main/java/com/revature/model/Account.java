@@ -1,23 +1,27 @@
 package com.revature.model;
 
+import java.util.Arrays;
+
 public class Account {
     private int accountId;
     private String firstName;
     private String lastName;
     private String username;
-    private String password;
     private int accessLevel;
+    private byte[] hash;
 
     public Account() {
     }
 
-    public Account(int accountId, String firstName, String lastName, String username, String password, int accessLevel) {
+
+    public Account(int accountId, String firstName, String lastName, String username, byte[] hash, int accessLevel) {
         this.accountId = accountId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
-        this.password = password;
+        this.hash = hash;
         this.accessLevel = accessLevel;
+
     }
 
     public int getAccountId() {
@@ -52,14 +56,6 @@ public class Account {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getAccessLevel() {
         return accessLevel;
     }
@@ -68,15 +64,23 @@ public class Account {
         this.accessLevel = accessLevel;
     }
 
+    public byte[] getHash() {
+        return hash;
+    }
+
+    public void setHash(byte[] hash) {
+        this.hash = hash;
+    }
+
     @Override
     public String toString() {
-        return "account{" +
+        return "Account{" +
                 "accountId=" + accountId +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", accessLevel=" + accessLevel +
+                ", hash=" + Arrays.toString(hash) +
                 '}';
     }
 }
