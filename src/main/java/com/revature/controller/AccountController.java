@@ -10,7 +10,7 @@ import io.javalin.Javalin;
 import java.util.ArrayList;
 
 
-public class AccountController extends Controller{
+public class AccountController extends Controller {
 
     private AccountService accountService = new AccountService();
 
@@ -20,15 +20,15 @@ public class AccountController extends Controller{
         //Get All accounts
         app.get("/accounts", ctx -> {
 
-            if(ctx.req.getSession(false)!=null){
-                ArrayList<Account> accounts = accountService.getAccounts();
+            ArrayList<Account> accounts = accountService.getAccounts();
+
+            if(accounts.isEmpty()){
+                ctx.status(401);
+            }
+            else{
                 ctx.json(accounts);
                 ctx.status(200);
             }
-            else {
-                ctx.status(401);
-            }
-
 
         }, Role.EMPLOYEE);
 

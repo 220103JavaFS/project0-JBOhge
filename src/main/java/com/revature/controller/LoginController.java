@@ -25,7 +25,7 @@ public class LoginController extends Controller {
             }
             else {
                 ctx.req.getSession().invalidate();
-                ctx.status(401);
+                ctx.status(400);
             }
         }, Role.ANYONE);
 

@@ -9,6 +9,8 @@ import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+
 public class Application {
 
     private static Logger log = LoggerFactory.getLogger(Application.class);
@@ -21,6 +23,18 @@ public class Application {
 
         app = Javalin.create(config -> {
             config.accessManager((handler, ctx, routeRoles) -> {
+
+                //if the user does not have a session deny request unless its for the login or logout or open endpoints
+                ArrayList<String> openList = new ArrayList<>();
+                openList.add("/login");
+                openList.add("/logout");
+                openList.add("/accounts/new");
+
+
+                if(ctx.req.getSession(false)==null && !openList.contains(ctx.path())){
+                    ctx.status(401);
+                    return;
+                }
 
 
                 Role userRole = getUserRole(ctx);
