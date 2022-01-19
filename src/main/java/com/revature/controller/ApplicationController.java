@@ -5,6 +5,8 @@ import com.revature.model.Application;
 import com.revature.service.ApplicationService;
 import com.revature.service.BankAccountService;
 import io.javalin.Javalin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -12,10 +14,12 @@ public class ApplicationController extends Controller {
 
     ApplicationService applicationService = new ApplicationService();
     BankAccountService bankAccountService = new BankAccountService();
+    private static Logger log = LoggerFactory.getLogger(com.revature.Application.class);
 
     @Override
     public void addRoutes(Javalin app) {
-        app.get("/Applications", ctx -> {
+        app.get("/applications", ctx -> {
+            log.info("received /applications request");
             ArrayList<Application> appList = applicationService.getApplications();
             if(appList == null){
                 ctx.status(401);
@@ -27,7 +31,8 @@ public class ApplicationController extends Controller {
         }, Role.EMPLOYEE);
 
 
-        app.get("/Applications/myapplication", ctx -> {
+        app.get("/applications/myapplication", ctx -> {
+            log.info("received /application/myapplications request");
             int accountId = 0;
             try{
                 accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
@@ -48,7 +53,8 @@ public class ApplicationController extends Controller {
 
         },Role.ANYONE);
 
-        app.get("/Applications/{id}", ctx -> {
+        app.get("/applications/{id}", ctx -> {
+            log.info("received /applications/{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             Application application = applicationService.getApplicationById(applicationId);
 
@@ -61,7 +67,8 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
-        app.post("/Applications/approve/{id}", ctx -> {
+        app.post("/applications/approve/{id}", ctx -> {
+            log.info("received /applications/approve/{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             //create new bank account
             if(bankAccountService.createBankAccount(applicationId)){
@@ -72,7 +79,8 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
-        app.post("/Applications/new", ctx -> {
+        app.post("/applications/new", ctx -> {
+            log.info("received /applications/new request");
             Application application = ctx.bodyAsClass(Application.class);
             try{
                 application.setAccountId((Integer)ctx.req.getSession(false).getAttribute("accountId"));
@@ -89,7 +97,8 @@ public class ApplicationController extends Controller {
 
         }, Role.ANYONE);
 
-        app.delete("/Applications/delete/{id}", ctx -> {
+        app.delete("/applications/delete/{id}", ctx -> {
+            log.info("received /applications/delete{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             if(applicationService.deleteApplication(applicationId)){
                 ctx.status(200);

@@ -6,45 +6,53 @@ import com.revature.model.BankAccount;
 import com.revature.model.Transaction;
 import com.revature.service.BankAccountService;
 import io.javalin.Javalin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class BankAccountController extends Controller {
 
+    private static Logger log = LoggerFactory.getLogger(com.revature.Application.class);
+    BankAccountService bankAccountService = new BankAccountService();
+
+
     @Override
     public void addRoutes(Javalin app) {
 
-        BankAccountService bankAccountService = new BankAccountService();
+        app.get("/bankaccounts", ctx -> {
 
-        app.get("/Bankaccounts", ctx -> {
+            log.info("received /bankaccounts request");
             ArrayList<BankAccount> bankList = bankAccountService.getBankAccounts();
-            if(bankList == null){
+            if (bankList == null) {
                 ctx.status(500);
-            }
-            else{
+            } else {
                 ctx.json(bankList);
                 ctx.status(200);
             }
         }, Role.EMPLOYEE);
 
-        app.get("/Bankaccounts/{id}", ctx -> {
+        app.get("/bankaccounts/{id}", ctx -> {
+
+            log.info("received /bankaccounts/{id} request");
             int bankAccountId = Integer.parseInt(ctx.pathParam("id"));
             BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId);
-            if(bankAccount == null){
+            if (bankAccount == null) {
                 ctx.status(401);
-            }
-            else{
+            } else {
                 ctx.json(bankAccount);
                 ctx.status(200);
             }
         }, Role.EMPLOYEE);
 
-        app.put("/Bankaccounts/withdraw", ctx -> {
-            int accountId = 0;
-            try{
-                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
+        app.put("/bankaccounts/withdraw", ctx -> {
 
-            } catch (ClassCastException e){
+            log.info("received /bankaccounts/withdraw request");
+            int accountId = 0;
+            try {
+                accountId = (Integer) ctx.req.getSession(false).getAttribute("accountId");
+
+            } catch (ClassCastException e) {
                 e.printStackTrace();
                 ctx.status(400);
                 return;
@@ -53,20 +61,20 @@ public class BankAccountController extends Controller {
             transaction.setOriginatorAccountId(accountId);
 
 
-
-            if(bankAccountService.withdrawFromBankAccount(transaction)){
+            if (bankAccountService.withdrawFromBankAccount(transaction)) {
                 ctx.status(200);
-            }
-            else{
+            } else {
                 ctx.status(400);
             }
         }, Role.ANYONE);
 
-        app.put("/Bankaccounts/deposit", ctx -> {
+        app.put("/bankaccounts/deposit", ctx -> {
+
+            log.info("received /bankaccounts/deposit request");
             int accountId = 0;
-            try{
-                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
-            } catch (ClassCastException e){
+            try {
+                accountId = (Integer) ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e) {
                 e.printStackTrace();
                 ctx.status(400);
                 return;
@@ -75,19 +83,20 @@ public class BankAccountController extends Controller {
             transaction.setOriginatorAccountId(accountId);
 
 
-            if(bankAccountService.depositToBankAccount(transaction)){
+            if (bankAccountService.depositToBankAccount(transaction)) {
                 ctx.status(200);
-            }
-            else{
+            } else {
                 ctx.status(400);
             }
         }, Role.ANYONE);
 
-        app.put("/Bankaccounts/transfer", ctx -> {
+        app.put("/bankaccounts/transfer", ctx -> {
+
+            log.info("received /bankaccounts/transfer request");
             int accountId = 0;
-            try{
-                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
-            } catch (ClassCastException e){
+            try {
+                accountId = (Integer) ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e) {
                 e.printStackTrace();
                 ctx.status(400);
                 return;
@@ -96,32 +105,33 @@ public class BankAccountController extends Controller {
             transaction.setOriginatorAccountId(accountId);
 
 
-            if(bankAccountService.transferToBankAccount(transaction)){
+            if (bankAccountService.transferToBankAccount(transaction)) {
                 ctx.status(200);
-            }
-            else{
+            } else {
                 ctx.status(400);
             }
 
         }, Role.ANYONE);
 
-        app.put("/Bankaccounts/update", ctx -> {
+        app.put("/bankaccounts/update", ctx -> {
+
+            log.info("received /bankaccounts/update request");
             BankAccount bankAccount = ctx.bodyAsClass(BankAccount.class);
 
-            if(bankAccountService.updateBankAccount(bankAccount)){
+            if (bankAccountService.updateBankAccount(bankAccount)) {
                 ctx.status(200);
-            }
-            else {
+            } else {
                 ctx.status(400);
             }
         }, Role.ADMIN);
 
-        app.delete("Bankaccounts/delete/{id}", ctx -> {
+        app.delete("bankaccounts/delete/{id}", ctx -> {
+
+            log.info("received /bankaccounts/delete/{id} request");
             int bankAccountId = Integer.parseInt(ctx.pathParam("id"));
-            if(bankAccountService.deleteBankAccount(bankAccountId)){
+            if (bankAccountService.deleteBankAccount(bankAccountId)) {
                 ctx.status(200);
-            }
-            else {
+            } else {
                 ctx.status(400);
             }
 

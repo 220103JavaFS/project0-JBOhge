@@ -13,6 +13,9 @@ import java.util.ArrayList;
 
 public class BankAccountDAOImpl implements BankAccountDAO {
 
+    /*
+      gets every bankaccount records in the database
+     */
     @Override
     public ArrayList<BankAccount> getBankAccounts() {
         try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
@@ -29,6 +32,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
         return null;
     }
 
+    /*
+        gets the bankaccount with the bankaccount_id equal to parameter bankAccountId
+     */
     @Override
     public BankAccount getBankAccountById(int bankAccountId) {
         try(Connection connection = JDBCPostgreSQLConnection.getConnection()) {
@@ -47,6 +53,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
         return null;
     }
 
+    /*
+        Creates a new bankaccount entry in the database
+     */
     @Override
     public boolean createBankAccount(int applicationId) {
         ApplicationDAO applicationDAO = new ApplicationDAOImpl();
@@ -81,6 +90,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 
     }
 
+    /*
+        deletes a bankaccount from the database
+     */
     @Override
     public boolean deleteBankAccount(int bankAccountId) {
         try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
@@ -100,6 +112,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
         return false;
     }
 
+    /*
+        Withdraws an bankamount from an account
+     */
     @Override
     public boolean withdrawFromBankAccount(Transaction transaction) {
         if(transaction.getTransferAmount() <= 0){
@@ -116,6 +131,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
         return this.updateBankAccount(bankAccount);
     }
 
+    /*
+        Deposits an bankamount from into an bankaccount
+     */
     @Override
     public boolean depositToBankAccount(Transaction transaction) {
         if(transaction.getTransferAmount() <= 0){
@@ -133,6 +151,9 @@ public class BankAccountDAOImpl implements BankAccountDAO {
         return this.updateBankAccount(bankAccount);
     }
 
+    /*
+        Transfers an amount from one bankaccount to another bankaccount
+     */
     @Override
     public boolean transferToBankAccount(Transaction transaction) {
         if(transaction.getTransferAmount() <= 0){
@@ -146,13 +167,32 @@ public class BankAccountDAOImpl implements BankAccountDAO {
             return false;
         }
 
-        bankAccount.setBalance(bankAccount.getBalance()-transaction.getTransferAmount());
-        bankAccount2.setBalance(bankAccount2.getBalance()+transaction.getTransferAmount());
 
-        return this.updateBankAccount(bankAccount) && this.updateBankAccount(bankAccount2);
+        try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
+            String sql = "CALL transfer(?, ?, ?);";
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            int count = 1;
+            statement.setInt(count++, bankAccount.getBankAccountId());
+            statement.setInt(count++, bankAccount2.getBankAccountId());
+            statement.setDouble(count++, transaction.getTransferAmount());
+
+            statement.execute();
+
+            return true;
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+
+
+        return false;
 
     }
-
+    /*
+        Updates the bankaccount
+     */
     public boolean updateBankAccount(BankAccount bankAccount){
         try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
             String sql = "UPDATE bankaccount SET balance = ? WHERE bankaccount_id = ?;";

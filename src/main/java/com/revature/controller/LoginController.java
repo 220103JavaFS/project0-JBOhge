@@ -5,16 +5,20 @@ import com.revature.model.Account;
 import com.revature.model.AccountDTO;
 import com.revature.service.LoginService;
 import io.javalin.Javalin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class LoginController extends Controller {
 
     LoginService loginService = new LoginService();
+    private static Logger log = LoggerFactory.getLogger(com.revature.Application.class);
 
     @Override
     public void addRoutes(Javalin app) {
 
 
         app.post("/login", ctx -> {
+            log.info("received /login request");
             AccountDTO account = ctx.bodyAsClass(AccountDTO.class);
             Account a  = loginService.login(account.getUsername(), account.getPassword());
             if(a != null){
@@ -31,8 +35,9 @@ public class LoginController extends Controller {
         }, Role.ANYONE);
 
         app.get("/logout", ctx -> {
-           ctx.req.getSession().invalidate();
-           ctx.status(200);
+            log.info("received /logout request");
+            ctx.req.getSession().invalidate();
+            ctx.status(200);
         }, Role.ANYONE);
 
     }

@@ -4,6 +4,8 @@ import com.revature.JDBCPostgreSQLConnection;
 import com.revature.model.Account;
 import com.revature.model.AllAccount;
 import com.revature.model.BankAccount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 
 
 public class AccountDAOImpl implements AccountDAO{
+
+        private static Logger log = LoggerFactory.getLogger(com.revature.Application.class);
 
 
         public AccountDAOImpl(){
@@ -32,7 +36,7 @@ public class AccountDAOImpl implements AccountDAO{
                         statement.setInt(count++, a.getAccessLevel());
 
                         statement.execute();
-
+                        log.debug("Added Account to Database");
                         return true;
 
                 }
@@ -40,6 +44,7 @@ public class AccountDAOImpl implements AccountDAO{
                         e.printStackTrace();
                 }
 
+                log.error("Failed to Add Account to Database");
                 return false;
         }
 
@@ -51,11 +56,13 @@ public class AccountDAOImpl implements AccountDAO{
                         while(resultSet.next()){
                                 accounts.add(createAccountObj(resultSet));
                         }
+                        log.debug("Got AccountList from database");
                         return accounts;
                 }
                 catch (SQLException e){
                         e.printStackTrace();
                 }
+                log.error("Failed to Get AccountList from Database");
                 return new ArrayList<Account>();
         }
 
@@ -68,12 +75,14 @@ public class AccountDAOImpl implements AccountDAO{
 
                         ResultSet resultSet = statement.executeQuery();
                         if(resultSet.next()){
+                                log.debug("Got Account from database");
                                 return createAccountObj(resultSet);
                         }
                 }
                 catch (SQLException e){
                         e.printStackTrace();
                 }
+                log.error("Failed to Get Account from Database");
                 return null;
         }
 
@@ -103,12 +112,14 @@ public class AccountDAOImpl implements AccountDAO{
 
                         allAccount.setBankAccountList(bankAccountList);
 
+                        log.debug("Got AllAccount from database");
                         return allAccount;
 
                 }
                 catch (SQLException e){
                         e.printStackTrace();
                 }
+                log.error("Failed to Get AllAccounts from Database");
                 return null;
         }
 
@@ -127,6 +138,7 @@ public class AccountDAOImpl implements AccountDAO{
                 catch (SQLException e){
                         e.printStackTrace();
                 }
+                log.error("Failed to Get Account from Database with username: " + username);
                 return null;
         }
 
@@ -151,7 +163,7 @@ public class AccountDAOImpl implements AccountDAO{
                 catch (SQLException e){
                         e.printStackTrace();
                 }
-
+                log.error("Failed to Update Account from Database with username: " + a.getUsername());
                 return false;
         }
 
@@ -170,7 +182,7 @@ public class AccountDAOImpl implements AccountDAO{
                 catch (SQLException e){
                         e.printStackTrace();
                 }
-
+                log.error("Failed to Delete Account from Database with id: " + id);
                 return false;
         }
 

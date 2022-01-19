@@ -22,6 +22,8 @@ public class Application {
         app = Javalin.create(config -> {
             config.accessManager((handler, ctx, routeRoles) -> {
 
+                //GENERAL ACCESS MANAGER
+
                 //if the user does not have a session deny request unless its for the login or logout or open endpoints
                 ArrayList<String> openList = new ArrayList<>();
                 openList.add("/login");
@@ -34,8 +36,29 @@ public class Application {
                     return;
                 }
 
+                //CHECKING USERS ACCESS LEVEL
+                int accessLevel = 1;
+                try{
+                    accessLevel = (Integer) ctx.req.getSession(false).getAttribute("accessLevel");
+                }
+                catch (Exception e){
+                    //attribute "accessLevel" didn't exist or is not an Account object
+                }
 
-                Role userRole = getUserRole(ctx);
+                Role userRole = Role.ANYONE;
+                switch (accessLevel){
+                    case 2:
+                        userRole = Role.EMPLOYEE;
+                        break;
+                    case 3:
+                        userRole = Role.ADMIN;
+                        break;
+                    default:
+                        userRole = Role.ANYONE;
+                        break;
+                }
+
+
                 //if user is an ADMIN or route is for ANYONE
                 if (userRole.equals(Role.ADMIN) || routeRoles.contains(Role.ANYONE)) {
                     handler.handle(ctx);
@@ -62,26 +85,6 @@ public class Application {
 
     }
 
-
-    //static helper method to get the user's role by looking at the
-    private static Role getUserRole(Context ctx) {
-        int accessLevel = 1;
-        try{
-            accessLevel = (Integer) ctx.req.getSession(false).getAttribute("accessLevel");
-        }
-        catch (Exception e){
-            //attribute "accessLevel" didn't exist or is not an Account object
-        }
-
-        switch (accessLevel){
-            case 2:
-                return Role.EMPLOYEE;
-            case 3:
-                return Role.ADMIN;
-            default:
-                return Role.ANYONE;
-        }
-    }
 
     public static void configure(Controller... controllers){
         for(Controller c : controllers){
