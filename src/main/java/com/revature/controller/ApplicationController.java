@@ -3,6 +3,7 @@ package com.revature.controller;
 import com.revature.Role;
 import com.revature.model.Application;
 import com.revature.service.ApplicationService;
+import com.revature.service.BankAccountService;
 import io.javalin.Javalin;
 
 import java.util.ArrayList;
@@ -10,12 +11,13 @@ import java.util.ArrayList;
 public class ApplicationController extends Controller {
 
     ApplicationService applicationService = new ApplicationService();
+    BankAccountService bankAccountService = new BankAccountService();
 
     @Override
     public void addRoutes(Javalin app) {
         app.get("/Applications", ctx -> {
             ArrayList<Application> appList = applicationService.getApplications();
-            if(appList.isEmpty()){
+            if(appList == null){
                 ctx.status(401);
             }
             else{
@@ -33,24 +35,46 @@ public class ApplicationController extends Controller {
                 ctx.status(200);
             }
             else {
-                ctx.status(400);
+                ctx.status(404);
             }
-        }, Role.ANYONE);
-
-        app.put("/Applications/update/{id}", ctx -> {
-            int applicationId = Integer.parseInt(ctx.pathParam("id"));
-        });
+        }, Role.EMPLOYEE);
 
         app.post("/Application/approve/{id}", ctx -> {
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
-        });
+            //create new bank account
+            if(bankAccountService.addBankAccount(applicationId)){
+                ctx.status(201);
+            }
+            else {
+                ctx.status(400);
+            }
+        }, Role.EMPLOYEE);
 
         app.post("/Applications/new", ctx -> {
+            Application application = ctx.bodyAsClass(Application.class);
+            try{
+                application.setAccountId((Integer)ctx.req.getSession(false).getAttribute("accountId"));
+            } catch (ClassCastException e){
+                e.printStackTrace();
+            }
 
-        });
+            if(applicationService.addApplication(application)){
+                ctx.status(201);
+            }
+            else {
+                ctx.status(400);
+            }
+
+        }, Role.ANYONE);
 
         app.delete("/Applications/delete/{id}", ctx -> {
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
-        });
+            if(applicationService.deleteApplication(applicationId)){
+                ctx.status(200);
+            }
+            else {
+                ctx.status(400);
+            }
+        }, Role.ADMIN);
     }
 }

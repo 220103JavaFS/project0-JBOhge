@@ -21,6 +21,7 @@ public class LoginController extends Controller {
                 ctx.req.getSession();
                 ctx.req.getSession(false).setAttribute("account", a);
                 ctx.req.getSession(false).setAttribute("accessLevel", a.getAccessLevel());
+                ctx.req.getSession(false).setAttribute("accountId", a.getAccountId());
                 ctx.status(200);
             }
             else {

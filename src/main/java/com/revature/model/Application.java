@@ -7,6 +7,17 @@ public class Application {
     private int creditScore;
     private int debt;
 
+    public Application(){
+
+    }
+
+    public Application(int accountId, int creditScore, int debt) {
+        this.applicationId = 1;
+        this.accountId = accountId;
+        this.creditScore = creditScore;
+        this.debt = debt;
+    }
+
     public Application(int applicationId, int accountId, int creditScore, int debt) {
         this.applicationId = applicationId;
         this.accountId = accountId;

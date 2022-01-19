@@ -1,8 +1,6 @@
 package com.revature;
 
-import com.revature.controller.AccountController;
-import com.revature.controller.Controller;
-import com.revature.controller.LoginController;
+import com.revature.controller.*;
 import com.revature.model.Account;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -47,7 +45,7 @@ public class Application {
                     handler.handle(ctx);
                 }
                 else {
-                    ctx.status(401).result("Unauthorized");
+                    ctx.status(403).result("Forbidden");
                 }
             });
 
@@ -57,7 +55,7 @@ public class Application {
         app.get("/", ctx -> ctx.result("Hello from Springboot-lite"), Role.ANYONE);
 
         //Add all Controller routes
-        configure(new AccountController(), new LoginController());
+        configure(new AccountController(), new LoginController(), new ApplicationController(), new BankAccountController());
 
         //Start Javalin on Port 7000
         app.start(7000);
