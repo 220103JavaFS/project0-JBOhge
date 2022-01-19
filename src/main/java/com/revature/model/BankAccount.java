@@ -3,9 +3,9 @@ package com.revature.model;
 public class BankAccount {
     private int bankAccountId;
     private int accountId;
-    private int balance;
+    private double balance;
 
-    public BankAccount(int bankAccountId, int accountId, int balance) {
+    public BankAccount(int bankAccountId, int accountId, double balance) {
         this.bankAccountId = bankAccountId;
         this.accountId = accountId;
         this.balance = balance;
@@ -27,11 +27,11 @@ public class BankAccount {
         this.accountId = accountId;
     }
 
-    public int getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 }

@@ -3,6 +3,7 @@ package com.revature.controller;
 import com.revature.Role;
 import com.revature.model.Application;
 import com.revature.model.BankAccount;
+import com.revature.model.Transaction;
 import com.revature.service.BankAccountService;
 import io.javalin.Javalin;
 
@@ -18,7 +19,7 @@ public class BankAccountController extends Controller {
         app.get("/Bankaccounts", ctx -> {
             ArrayList<BankAccount> bankList = bankAccountService.getBankAccounts();
             if(bankList == null){
-                ctx.status(401);
+                ctx.status(500);
             }
             else{
                 ctx.json(bankList);
@@ -39,22 +40,76 @@ public class BankAccountController extends Controller {
         }, Role.EMPLOYEE);
 
         app.put("/Bankaccounts/withdraw", ctx -> {
+            int accountId = 0;
+            try{
+                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
 
-        });
+            } catch (ClassCastException e){
+                e.printStackTrace();
+                ctx.status(400);
+                return;
+            }
+            Transaction transaction = ctx.bodyAsClass(Transaction.class);
+            transaction.setOriginatorAccountId(accountId);
+
+
+
+            if(bankAccountService.withdrawFromBankAccount(transaction)){
+                ctx.status(200);
+            }
+            else{
+                ctx.status(400);
+            }
+        }, Role.ANYONE);
 
         app.put("/Bankaccounts/deposit", ctx -> {
+            int accountId = 0;
+            try{
+                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e){
+                e.printStackTrace();
+                ctx.status(400);
+                return;
+            }
+            Transaction transaction = ctx.bodyAsClass(Transaction.class);
+            transaction.setOriginatorAccountId(accountId);
 
-        });
 
-        app.put("/Bankaccount/transfer", ctx -> {
+            if(bankAccountService.depositToBankAccount(transaction)){
+                ctx.status(200);
+            }
+            else{
+                ctx.status(400);
+            }
+        }, Role.ANYONE);
 
-        });
+        app.put("/Bankaccounts/transfer", ctx -> {
+            int accountId = 0;
+            try{
+                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e){
+                e.printStackTrace();
+                ctx.status(400);
+                return;
+            }
+            Transaction transaction = ctx.bodyAsClass(Transaction.class);
+            transaction.setOriginatorAccountId(accountId);
+
+
+            if(bankAccountService.transferToBankAccount(transaction)){
+                ctx.status(200);
+            }
+            else{
+                ctx.status(400);
+            }
+
+        }, Role.ANYONE);
 
         app.post("/Bankaccounts/new", ctx -> {
-
+            //Unused new bank accounts are made by approving a bank account application at "/Applications/approve/{id}
         });
 
-        app.delete("Bankaccount/delete/{id}", ctx -> {
+        app.delete("Bankaccounts/delete/{id}", ctx -> {
             int bankAccountId = Integer.parseInt(ctx.pathParam("id"));
             if(bankAccountService.deleteBankAccount(bankAccountId)){
                 ctx.status(200);

@@ -39,10 +39,10 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
-        app.post("/Application/approve/{id}", ctx -> {
+        app.post("/Applications/approve/{id}", ctx -> {
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             //create new bank account
-            if(bankAccountService.addBankAccount(applicationId)){
+            if(bankAccountService.createBankAccount(applicationId)){
                 ctx.status(201);
             }
             else {

@@ -2,27 +2,45 @@ package com.revature.service;
 
 import com.revature.model.Application;
 import com.revature.model.BankAccount;
+import com.revature.model.Transaction;
+import com.revature.repository.BankAccountDAO;
+import com.revature.repository.BankAccountDAOImpl;
 
 import java.util.ArrayList;
 
 public class BankAccountService {
+
+    BankAccountDAO bankAccountDAO = new BankAccountDAOImpl();
+
     public ArrayList<BankAccount> getBankAccounts() {
 
-        return null;
+        return bankAccountDAO.getBankAccounts();
     }
 
     public BankAccount getBankAccountById(int bankAccountId) {
 
-        return null;
+        return bankAccountDAO.getBankAccountById(bankAccountId);
     }
 
-    public boolean addBankAccount(int applicationId) {
+    public boolean createBankAccount(int applicationId) {
 
-        return false;
+        return bankAccountDAO.createBankAccount(applicationId);
     }
 
     public boolean deleteBankAccount(int bankAccountId) {
 
-        return false;
+        return bankAccountDAO.deleteBankAccount(bankAccountId);
+    }
+
+    public boolean withdrawFromBankAccount(Transaction transaction) {
+        return bankAccountDAO.withdrawFromBankAccount(transaction);
+    }
+
+    public boolean depositToBankAccount(Transaction transaction) {
+        return bankAccountDAO.depositToBankAccount(transaction);
+    }
+
+    public boolean transferToBankAccount(Transaction transaction) {
+        return bankAccountDAO.transferToBankAccount(transaction);
     }
 }
