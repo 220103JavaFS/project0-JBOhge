@@ -2,6 +2,7 @@ package com.revature.service;
 
 import com.revature.model.Account;
 import com.revature.model.AccountDTO;
+import com.revature.model.AllAccount;
 import com.revature.repository.AccountDAOImpl;
 
 import java.nio.charset.StandardCharsets;
@@ -23,6 +24,10 @@ public class AccountService {
 
     public Account getAccountByUsername(String username){
         return accountDAO.getAccountByUsername(username);
+    }
+
+    public AllAccount getAllAccounts(int accountId){
+        return accountDAO.getAllAccountById(accountId);
     }
 
 

@@ -14,4 +14,5 @@ public interface ApplicationDAO {
 
     boolean deleteApplication(int applicationId);
 
+    ArrayList<Application> getApplicationByAccountId(int accountId);
 }

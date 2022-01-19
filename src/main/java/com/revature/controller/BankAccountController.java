@@ -105,9 +105,16 @@ public class BankAccountController extends Controller {
 
         }, Role.ANYONE);
 
-        app.post("/Bankaccounts/new", ctx -> {
-            //Unused new bank accounts are made by approving a bank account application at "/Applications/approve/{id}
-        });
+        app.put("/Bankaccounts/update", ctx -> {
+            BankAccount bankAccount = ctx.bodyAsClass(BankAccount.class);
+
+            if(bankAccountService.updateBankAccount(bankAccount)){
+                ctx.status(200);
+            }
+            else {
+                ctx.status(400);
+            }
+        }, Role.ADMIN);
 
         app.delete("Bankaccounts/delete/{id}", ctx -> {
             int bankAccountId = Integer.parseInt(ctx.pathParam("id"));

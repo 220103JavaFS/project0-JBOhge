@@ -26,4 +26,8 @@ public class ApplicationService {
     public boolean deleteApplication(int applicationId) {
         return applicationDAO.deleteApplication(applicationId);
     }
+
+    public ArrayList<Application> getApplicationsByAccountId(int accountId) {
+        return applicationDAO.getApplicationByAccountId(accountId);
+    }
 }

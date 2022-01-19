@@ -2,6 +2,8 @@ package com.revature.repository;
 
 import com.revature.JDBCPostgreSQLConnection;
 import com.revature.model.Account;
+import com.revature.model.AllAccount;
+import com.revature.model.BankAccount;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,6 +70,41 @@ public class AccountDAOImpl implements AccountDAO{
                         if(resultSet.next()){
                                 return createAccountObj(resultSet);
                         }
+                }
+                catch (SQLException e){
+                        e.printStackTrace();
+                }
+                return null;
+        }
+
+        public AllAccount getAllAccountById(int accountId){
+                try(Connection connection = JDBCPostgreSQLConnection.getConnection()) {
+                        AllAccount allAccount = new AllAccount();
+                        Account account = this.getAccountById(accountId);
+                        if(account == null){
+                              return null;
+                        }
+                        allAccount.setAccount(account);
+
+                        //Get Bank accounts
+                        String sql = "SELECT * FROM bankaccount WHERE account_id = ?;";
+                        PreparedStatement statement = connection.prepareStatement(sql);
+                        statement.setInt(1, accountId);
+                        ResultSet resultSet = statement.executeQuery();
+
+                        ArrayList<BankAccount> bankAccountList = new ArrayList<>();
+
+                        while(resultSet.next()){
+                                int bankAccountId = resultSet.getInt("bankaccount_id");
+                                double balance = resultSet.getDouble("balance");
+                                BankAccount bankAccount = new BankAccount(bankAccountId, accountId, balance);
+                                bankAccountList.add(bankAccount);
+                        }
+
+                        allAccount.setBankAccountList(bankAccountList);
+
+                        return allAccount;
+
                 }
                 catch (SQLException e){
                         e.printStackTrace();

@@ -27,6 +27,27 @@ public class ApplicationController extends Controller {
         }, Role.EMPLOYEE);
 
 
+        app.get("/Applications/myapplication", ctx -> {
+            int accountId = 0;
+            try{
+                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e){
+                e.printStackTrace();
+                ctx.status(400);
+                return;
+            }
+
+            ArrayList<Application> appList = applicationService.getApplicationsByAccountId(accountId);
+            if(appList == null){
+                ctx.json(400);
+            }
+            else {
+                ctx.json(appList);
+                ctx.status(200);
+            }
+
+        },Role.ANYONE);
+
         app.get("/Applications/{id}", ctx -> {
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             Application application = applicationService.getApplicationById(applicationId);

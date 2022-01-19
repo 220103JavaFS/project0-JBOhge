@@ -3,6 +3,7 @@ package com.revature.controller;
 import com.revature.Role;
 import com.revature.model.Account;
 import com.revature.model.AccountDTO;
+import com.revature.model.AllAccount;
 import com.revature.service.AccountService;
 import io.javalin.Javalin;
 
@@ -41,7 +42,7 @@ public class AccountController extends Controller {
                 ctx.status(400);
                 return;
             }
-            Account a = accountService.getAccountById(accountId);
+            AllAccount a = accountService.getAllAccounts(accountId);
             if(a != null){
                 ctx.json(a);
                 ctx.status(200);

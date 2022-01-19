@@ -27,6 +27,10 @@ public class BankAccountService {
         return bankAccountDAO.createBankAccount(applicationId);
     }
 
+    public boolean updateBankAccount(BankAccount bankAccount){
+        return bankAccountDAO.updateBankAccount(bankAccount);
+    }
+
     public boolean deleteBankAccount(int bankAccountId) {
 
         return bankAccountDAO.deleteBankAccount(bankAccountId);

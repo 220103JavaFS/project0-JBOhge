@@ -13,6 +13,8 @@ public interface BankAccountDAO {
 
     boolean createBankAccount(int applicationId);
 
+    boolean updateBankAccount(BankAccount bankAccount);
+
     boolean deleteBankAccount(int bankAccountId);
 
     boolean withdrawFromBankAccount(Transaction transaction);

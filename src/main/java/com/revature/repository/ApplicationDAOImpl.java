@@ -87,6 +87,26 @@ public class ApplicationDAOImpl implements ApplicationDAO{
         return false;
     }
 
+    @Override
+    public ArrayList<Application> getApplicationByAccountId(int accountId) {
+        try(Connection connection = JDBCPostgreSQLConnection.getConnection()){
+            ArrayList<Application> applications = new ArrayList<>();
+            String sql = "SELECT * FROM application WHERE account_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, accountId);
+            ResultSet resultSet = statement.executeQuery();
+
+            while(resultSet.next()){
+                applications.add(createAccountObj(resultSet));
+            }
+            return applications;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private static Application createAccountObj(ResultSet resultSet) throws SQLException {
         int applicationId = resultSet.getInt("application_id");
         int accountId = resultSet.getInt("account_id");
