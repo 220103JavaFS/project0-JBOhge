@@ -32,8 +32,27 @@ public class AccountController extends Controller {
 
         }, Role.EMPLOYEE);
 
+        app.get("/accounts/myaccount", ctx -> {
+            int accountId = 0;
+            try{
+                accountId = (Integer)ctx.req.getSession(false).getAttribute("accountId");
+            } catch (ClassCastException e){
+                e.printStackTrace();
+                ctx.status(400);
+                return;
+            }
+            Account a = accountService.getAccountById(accountId);
+            if(a != null){
+                ctx.json(a);
+                ctx.status(200);
+            }
+            else {
+                ctx.status(404);
+            }
+        }, Role.ANYONE);
+
+
         app.get("/accounts/{id}", ctx -> {
-            //TODO: Check that user should have access to this page
             int id = Integer.parseInt(ctx.pathParam("id"));
             Account a = accountService.getAccountById(id);
             if(a != null){
@@ -44,7 +63,7 @@ public class AccountController extends Controller {
                 ctx.status(404);
             }
 
-        }, Role.ANYONE);
+        }, Role.EMPLOYEE);
 
         app.get("/accounts/username/{username}", ctx -> {
            String username = ctx.pathParam("username");

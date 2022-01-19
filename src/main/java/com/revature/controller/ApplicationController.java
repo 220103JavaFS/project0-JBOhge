@@ -26,6 +26,7 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
+
         app.get("/Applications/{id}", ctx -> {
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             Application application = applicationService.getApplicationById(applicationId);

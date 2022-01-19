@@ -25,6 +25,7 @@ public class AccountService {
         return accountDAO.getAccountByUsername(username);
     }
 
+
     public boolean addAccount(AccountDTO accountDTO) {
         Account account = Account.getAccountObject(accountDTO);
 
