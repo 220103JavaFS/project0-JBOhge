@@ -38,6 +38,7 @@ public class AccountController extends Controller {
 
         }, Role.EMPLOYEE);
 
+        //Get myaccount
         app.get("/accounts/myaccounts", ctx -> {
             log.info("received /accounts/myaccount request");
             int accountId = 0;
@@ -58,7 +59,7 @@ public class AccountController extends Controller {
             }
         }, Role.ANYONE);
 
-
+        //get account by this id
         app.get("/accounts/id/{id}", ctx -> {
             log.info("received /accounts{id} request");
             int id = Integer.parseInt(ctx.pathParam("id"));
@@ -73,6 +74,8 @@ public class AccountController extends Controller {
 
         }, Role.EMPLOYEE);
 
+
+        //get account by this username
         app.get("/accounts/username/{username}", ctx -> {
             log.info("received /accounts/username/{username} request");
            String username = ctx.pathParam("username");
@@ -87,6 +90,8 @@ public class AccountController extends Controller {
 
         }, Role.EMPLOYEE);
 
+
+        //create a new account
         app.post("/accounts/new", ctx -> {
             log.info("received /accounts/new request");
            AccountDTO accountDTO = ctx.bodyAsClass(AccountDTO.class);
@@ -97,6 +102,8 @@ public class AccountController extends Controller {
             }
         }, Role.ANYONE);
 
+
+        //update an account
         app.put("/accounts/update", ctx -> {
             log.info("received /accounts/update request");
             AccountDTO accountDTO = ctx.bodyAsClass(AccountDTO.class);
@@ -108,6 +115,8 @@ public class AccountController extends Controller {
             }
         }, Role.ADMIN);
 
+
+        //delete the account with this id
         app.delete("accounts/delete/{id}", ctx -> {
             log.info("received /accounts/delete/{id} request");
            int accountId = Integer.parseInt(ctx.pathParam("id"));

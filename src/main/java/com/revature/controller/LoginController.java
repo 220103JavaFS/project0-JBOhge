@@ -17,6 +17,7 @@ public class LoginController extends Controller {
     public void addRoutes(Javalin app) {
 
 
+        //login and get a session
         app.post("/login", ctx -> {
             log.info("received /login request");
             AccountDTO account = ctx.bodyAsClass(AccountDTO.class);
@@ -34,6 +35,7 @@ public class LoginController extends Controller {
             }
         }, Role.ANYONE);
 
+        //logout
         app.get("/logout", ctx -> {
             log.info("received /logout request");
             ctx.req.getSession().invalidate();

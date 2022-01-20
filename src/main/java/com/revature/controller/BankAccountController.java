@@ -20,6 +20,8 @@ public class BankAccountController extends Controller {
     @Override
     public void addRoutes(Javalin app) {
 
+
+        //get all the bankaccounts
         app.get("/bankaccounts", ctx -> {
 
             log.info("received /bankaccounts request");
@@ -32,6 +34,8 @@ public class BankAccountController extends Controller {
             }
         }, Role.EMPLOYEE);
 
+
+        //get the bankaccount with the id of the provided id
         app.get("/bankaccounts/id/{id}", ctx -> {
 
             log.info("received /bankaccounts/{id} request");
@@ -45,6 +49,8 @@ public class BankAccountController extends Controller {
             }
         }, Role.EMPLOYEE);
 
+
+        //withdraw an amount of money from a bankaccount
         app.put("/bankaccounts/withdraw", ctx -> {
 
             log.info("received /bankaccounts/withdraw request");
@@ -68,6 +74,8 @@ public class BankAccountController extends Controller {
             }
         }, Role.ANYONE);
 
+
+        //deposity an ammount of money from a bankaccount
         app.put("/bankaccounts/deposit", ctx -> {
 
             log.info("received /bankaccounts/deposit request");
@@ -90,6 +98,8 @@ public class BankAccountController extends Controller {
             }
         }, Role.ANYONE);
 
+
+        //transfer an amount of month from one bankaccount to another
         app.put("/bankaccounts/transfer", ctx -> {
 
             log.info("received /bankaccounts/transfer request");
@@ -113,6 +123,8 @@ public class BankAccountController extends Controller {
 
         }, Role.ANYONE);
 
+
+        //update a bankaccount
         app.put("/bankaccounts/update", ctx -> {
 
             log.info("received /bankaccounts/update request");
@@ -125,6 +137,8 @@ public class BankAccountController extends Controller {
             }
         }, Role.ADMIN);
 
+
+        //delete the bankaccount with the given id
         app.delete("bankaccounts/delete/{id}", ctx -> {
 
             log.info("received /bankaccounts/delete/{id} request");

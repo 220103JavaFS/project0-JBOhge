@@ -18,6 +18,8 @@ public class ApplicationController extends Controller {
 
     @Override
     public void addRoutes(Javalin app) {
+
+        //get all applications
         app.get("/applications", ctx -> {
             log.info("received /applications request");
             ArrayList<Application> appList = applicationService.getApplications();
@@ -30,7 +32,7 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
-
+        //get my applications
         app.get("/applications/myapplications", ctx -> {
             log.info("received /application/myapplications request");
             int accountId = 0;
@@ -53,6 +55,8 @@ public class ApplicationController extends Controller {
 
         },Role.ANYONE);
 
+
+        //get the application with this id
         app.get("/applications/id/{id}", ctx -> {
             log.info("received /applications/{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
@@ -67,6 +71,8 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
+
+        //approve the application with this id
         app.post("/applications/approve/{id}", ctx -> {
             log.info("received /applications/approve/{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
@@ -79,6 +85,8 @@ public class ApplicationController extends Controller {
             }
         }, Role.EMPLOYEE);
 
+
+        //create a new application
         app.post("/applications/new", ctx -> {
             log.info("received /applications/new request");
             Application application = ctx.bodyAsClass(Application.class);
@@ -97,6 +105,8 @@ public class ApplicationController extends Controller {
 
         }, Role.ANYONE);
 
+
+        //delete the application with the provided id
         app.delete("/applications/delete/{id}", ctx -> {
             log.info("received /applications/delete{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
