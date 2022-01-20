@@ -38,7 +38,7 @@ public class AccountController extends Controller {
 
         }, Role.EMPLOYEE);
 
-        app.get("/accounts/myaccount", ctx -> {
+        app.get("/accounts/myaccounts", ctx -> {
             log.info("received /accounts/myaccount request");
             int accountId = 0;
             try{
@@ -59,7 +59,7 @@ public class AccountController extends Controller {
         }, Role.ANYONE);
 
 
-        app.get("/accounts/{id}", ctx -> {
+        app.get("/accounts/id/{id}", ctx -> {
             log.info("received /accounts{id} request");
             int id = Integer.parseInt(ctx.pathParam("id"));
             Account a = accountService.getAccountById(id);
@@ -106,7 +106,7 @@ public class AccountController extends Controller {
             else {
                 ctx.status(400);
             }
-        }, Role.EMPLOYEE);
+        }, Role.ADMIN);
 
         app.delete("accounts/delete/{id}", ctx -> {
             log.info("received /accounts/delete/{id} request");
@@ -117,7 +117,7 @@ public class AccountController extends Controller {
            else {
                ctx.status(400);
            }
-        }, Role.EMPLOYEE);
+        }, Role.ADMIN);
 
 
 

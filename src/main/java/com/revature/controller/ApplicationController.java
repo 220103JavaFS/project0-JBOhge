@@ -31,7 +31,7 @@ public class ApplicationController extends Controller {
         }, Role.EMPLOYEE);
 
 
-        app.get("/applications/myapplication", ctx -> {
+        app.get("/applications/myapplications", ctx -> {
             log.info("received /application/myapplications request");
             int accountId = 0;
             try{
@@ -53,7 +53,7 @@ public class ApplicationController extends Controller {
 
         },Role.ANYONE);
 
-        app.get("/applications/{id}", ctx -> {
+        app.get("/applications/id/{id}", ctx -> {
             log.info("received /applications/{id} request");
             int applicationId = Integer.parseInt(ctx.pathParam("id"));
             Application application = applicationService.getApplicationById(applicationId);

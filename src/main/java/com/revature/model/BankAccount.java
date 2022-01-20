@@ -5,6 +5,10 @@ public class BankAccount {
     private int accountId;
     private double balance;
 
+    BankAccount(){
+
+    }
+
     public BankAccount(int bankAccountId, int accountId, double balance) {
         this.bankAccountId = bankAccountId;
         this.accountId = accountId;

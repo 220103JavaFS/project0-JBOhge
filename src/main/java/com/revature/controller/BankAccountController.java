@@ -32,7 +32,7 @@ public class BankAccountController extends Controller {
             }
         }, Role.EMPLOYEE);
 
-        app.get("/bankaccounts/{id}", ctx -> {
+        app.get("/bankaccounts/id/{id}", ctx -> {
 
             log.info("received /bankaccounts/{id} request");
             int bankAccountId = Integer.parseInt(ctx.pathParam("id"));
