@@ -1,7 +1,12 @@
 # From https://github.com/github/gitignore/blob/master/Gradle.gitignore
 .gradle
-/build/
-/!build/!libs
+/build/classes
+/build/generated
+/build/reports
+/build/resources
+/build/test-results
+/build/tmp
+
 /logs/
 
 # Ignore Gradle GUI config
