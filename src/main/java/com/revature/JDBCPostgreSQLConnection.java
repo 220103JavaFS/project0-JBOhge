@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class JDBCPostgreSQLConnection {
 
     private static String url = "jdbc:postgresql://localhost:5432/proj0";
-    private static String url2 = "jdbc:postgresql://javafs220103ohgejb.ccidemni0rly.us-east-2.rds.amazonaws.com:5432/postgres";
+    private static String url2 = "jdbc:postgresql://javafs220103ohgejb.ccidemni0rly.us-east-2.rds.amazonaws.com:5432/postgres?currentSchema=public&user=postgres&password=password1";
 
     private static String userName = System.getenv("SQLUsername");
     private static String password = System.getenv("SQLPassword");
