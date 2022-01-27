@@ -36,6 +36,8 @@ public class test {
             ++count;
         }
         System.out.println(count);
+
+        System.out.println(Character.getNumericValue('Z'));
     }
 
 

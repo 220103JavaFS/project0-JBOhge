@@ -23,7 +23,7 @@ public class JDBCPostgreSQLConnection {
             }
 
 
-           return DriverManager.getConnection(url2, userName, password);
+           return DriverManager.getConnection(url, userName, password);
     }
 
 }

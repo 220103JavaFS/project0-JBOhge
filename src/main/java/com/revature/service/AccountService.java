@@ -3,6 +3,7 @@ package com.revature.service;
 import com.revature.model.Account;
 import com.revature.model.AccountDTO;
 import com.revature.model.AllAccount;
+import com.revature.repository.AccountDAO;
 import com.revature.repository.AccountDAOImpl;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +13,16 @@ import java.util.ArrayList;
 
 public class AccountService {
 
-    private AccountDAOImpl accountDAO = new AccountDAOImpl();
+    private AccountDAO accountDAO = new AccountDAOImpl();
+
+    public AccountService(){
+
+    }
+
+    public AccountService(AccountDAO accountDAO){
+        this.accountDAO=accountDAO;
+    }
+
 
     public ArrayList<Account> getAccounts()  {
         return accountDAO.getAccounts();
